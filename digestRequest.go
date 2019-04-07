@@ -127,7 +127,7 @@ func (r *DigestRequest) getNonceCount() string {
 
 func (r *DigestRequest) makeAuthorization(req *http.Request, parts map[string]string) string {
 	ha1 := getMD5([]string{r.username, parts[realm], r.password})
-	ha2 := getMD5([]string{req.Method, req.URL.String()})
+	ha2 := getMD5([]string{req.Method, req.URL.Path})
 	_, found := parts[qop]
 	if !found {
 		response := getMD5([]string{
@@ -140,7 +140,7 @@ func (r *DigestRequest) makeAuthorization(req *http.Request, parts map[string]st
 			r.username,
 			parts[realm],
 			parts[nonce],
-			req.URL.String(),
+			req.URL.Path,
 			parts[algorithm],
 			response,
 			parts[opaque],
@@ -161,7 +161,7 @@ func (r *DigestRequest) makeAuthorization(req *http.Request, parts map[string]st
 			r.username,
 			parts[realm],
 			parts[nonce],
-			req.URL.String(),
+			req.URL.Path,
 			parts[algorithm],
 			parts[qop],
 			nc,
